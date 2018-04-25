@@ -3,10 +3,10 @@
  * @author < stack fizz ---- huangchaolin@xylink.com >
  */
 import * as React from "react";
-import { ACTIVE_TODOS, ALL_TODOS, COMPLETED_TODOS } from "../constance";
-import { Util } from "../util";
+import { ACTIVE_TODOS, ALL_TODOS, COMPLETED_TODOS } from "../../constance/index";
+import { Util } from "../../util";
 import * as classNames from "classnames";
-import * as style from "./style/footer.scss";
+import * as style from "./style/index.scss";
 
 export interface IFooterProps {
   activeCount: number;

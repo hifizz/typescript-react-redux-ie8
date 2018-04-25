@@ -1,8 +1,8 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
-import Footer from "./Footer";
-import { TodoItem } from "./TodoItem";
-import * as style from "./style/app.scss";
+import Footer from "../Footer";
+import { TodoItem } from "../TodoItem";
+import * as style from "./style/index.scss";
 import {
   addTodo,
   changeNowShowing,
@@ -10,10 +10,11 @@ import {
   completeTodo,
   deleteTodo,
   editTodo,
-  ITodoAction
-} from "../actions";
-import { ACTIVE_TODOS, ALL_TODOS, COMPLETED_TODOS } from "../constance";
-import { ITodo, ITodoApp, ITodoList, TUUID, uuid } from "../types";
+  ITodoAction,
+  toggleAll
+} from "../../actions";
+import { ACTIVE_TODOS, ALL_TODOS, COMPLETED_TODOS } from "../../constance/index";
+import { ITodo, ITodoApp, ITodoList, TUUID, uuid } from "../../types";
 
 interface IAppComponentStateProps {
   todos: ITodoList;
@@ -27,6 +28,7 @@ interface IAppComponentDispatchProps {
   toggleTodoCompleted: (id: uuid) => void;
   onClearCompleted: () => void;
   onChangeNowShowing: (nowShowing: string) => void;
+  onToggleAll: (event: any) => void;
 }
 
 type IAppComponentProps = IAppComponentStateProps & IAppComponentDispatchProps;
@@ -59,6 +61,10 @@ const mapDispatchToProps = (dispatch: Dispatch<any>): IAppComponentDispatchProps
     onTodoEdit: (id: uuid, title: string) => {
       dispatch(editTodo(id, title));
     },
+    onToggleAll: (event: any) => {
+      const checked = event.target.checked;
+      dispatch(toggleAll(checked));
+    },
     toggleTodoCompleted: (id: uuid) => {
       dispatch(completeTodo(id));
     }
@@ -74,7 +80,14 @@ class AppComponent extends React.Component<IAppComponentProps, IAppComponentStat
   }
 
   public render(): JSX.Element {
-    const { todos, toggleTodoCompleted, onDeleteTodo, onTodoEdit, onClearCompleted } = this.props;
+    const {
+      todos,
+      toggleTodoCompleted,
+      onDeleteTodo,
+      onTodoEdit,
+      onClearCompleted,
+      onToggleAll
+    } = this.props;
 
     let main = null;
     const todoItems: Array<{}> = [];
@@ -84,6 +97,7 @@ class AppComponent extends React.Component<IAppComponentProps, IAppComponentStat
     let shownTodos;
 
     activeCount = todos.reduce<number>((accum: number, todo: ITodo) => {
+      console.log(todo);
       return (todo.completed ? accum : accum + 1) as number;
     }, 0);
 
@@ -118,7 +132,12 @@ class AppComponent extends React.Component<IAppComponentProps, IAppComponentStat
     if (todos.size > 0) {
       main = (
         <div className={style.main}>
-          <input type="checkbox" className={style.toggleAll} />
+          <input
+            type="checkbox"
+            className={style.toggleAll}
+            checked={activeCount <= 0}
+            onChange={onToggleAll}
+          />
           <ul className={style.list}>{todoItems}</ul>
         </div>
       );
@@ -143,7 +162,7 @@ class AppComponent extends React.Component<IAppComponentProps, IAppComponentStat
             className={style.todoInput}
             ref="todoInput"
             type="text"
-            placeholder="What needs to be done?"
+            placeholder="What needs to be done? "
             onKeyPress={this.onEnterKey}
           />
         </div>

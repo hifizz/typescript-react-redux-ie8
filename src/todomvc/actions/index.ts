@@ -1,16 +1,17 @@
 import { Action } from "redux";
 import { ITodo, TUUID, uuid } from "../types";
-
-export const ADD_TODO = "ADD_TODO";
-export const TOGGLE_COMPLETED_TODO = "TOGGLE_COMPLETED_TODO";
-export const CLEAR_COMPLETED_TODO = "CLEAR_COMPLETED_TODO";
-export const EDIT_TODO = "EDIT_TODO";
-export const DELETE_TODO = "DELETE_TODO";
-export const CHANGENOWSHOWINGFILTER = "CHANGENOWSHOWINGFILTER";
-
-export const ALL_TODOS = "ALL_TODOS";
-export const COMPLETED_TODOS = "COMPLETED_TODOS";
-export const ACTIVE_TODOS = "ACTIVE_TODOS";
+import {
+  ALL_TODOS,
+  COMPLETED_TODOS,
+  ACTIVE_TODOS,
+  ADD_TODO,
+  TOGGLE_COMPLETED_TODO,
+  CLEAR_COMPLETED_TODO,
+  EDIT_TODO,
+  DELETE_TODO,
+  CHANGENOWSHOWINGFILTER,
+  TOGGLE_ALL_TODO
+} from "../constance/index";
 
 export interface ITodo {
   id: string;
@@ -55,4 +56,11 @@ export function editTodo(id: uuid, title: string): IEditTodo {
 
 export function changeNowShowing(nowShowing: string) {
   return { type: CHANGENOWSHOWINGFILTER, nowShowing };
+}
+
+export interface IToggleAll extends Action {
+  checked: boolean;
+}
+export function toggleAll(checked: boolean): IToggleAll {
+  return { type: TOGGLE_ALL_TODO, checked };
 }

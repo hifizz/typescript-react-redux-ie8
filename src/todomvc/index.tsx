@@ -9,7 +9,7 @@ import { applyMiddleware, createStore, Store } from "redux";
 import * as utils from "../utils/index";
 import { createLogger } from "redux-logger";
 import thunkMiddleware from "redux-thunk";
-import App from "../todomvc/components/App";
+import App from "../todomvc/components/App/index";
 import MeetingApp from "../todomvc/reducers/index";
 
 const isIE8: boolean = utils.isIE8();
@@ -35,14 +35,15 @@ ReactDOM.render(
   document.getElementById("app")
 );
 
+// 一般情况我们这样用module.hot 即可，但是 react-redux 2.x 之后就不这种热重载了。
 // if ((module as any).hot) {
 //   (module as any).hot.accept();
 // }
 
 if ((module as any).hot) {
-  (module as any).hot.accept("../todomvc/components/App", () => {
+  (module as any).hot.accept("../todomvc/components/App/index", () => {
     // tslint:disable-next-line
-    const App = require("../todomvc/components/App").default;
-    ReactDOM.render(<App store={store} />, document.getElementById("root"));
+    const App = require("../todomvc/components/App/index").default;
+    ReactDOM.render(<App store={store} />, document.getElementById("app"));
   });
 }

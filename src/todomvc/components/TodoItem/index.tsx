@@ -4,8 +4,8 @@
  */
 import * as React from "react";
 import * as classNames from "classnames";
-import { uuid } from "../types";
-import * as style from "./style/todoItem.scss";
+import { uuid } from "../../types";
+import * as style from "./style/index.scss";
 
 export interface ITodoProps {
   key?: any;
@@ -16,12 +16,12 @@ export interface ITodoProps {
 }
 
 export class TodoItem extends React.Component<ITodoProps, {}> {
-  public shouldComponentUpdate = (nextProps: ITodoProps, nextState: {}): boolean => {
-    const todo = this.props.todo;
-    const i = todo === nextProps.todo;
-    console.log("diff", !i);
-    return !i;
-  };
+  // public shouldComponentUpdate = (nextProps: ITodoProps, nextState: {}): boolean => {
+  // const todo = this.props.todo;
+  // const same = todo === nextProps.todo;
+  // console.log("diff", same);
+  // return !same;
+  // };
 
   public onDelete = () => {
     this.props.onDelete(this.props.todo.id);
@@ -33,15 +33,15 @@ export class TodoItem extends React.Component<ITodoProps, {}> {
 
   public render() {
     const { title, completed } = this.props.todo;
-
     const itemClass = classNames(style.item, completed && style.completed);
+    console.log("render todo", completed);
 
     return (
       <li className={style.wrap}>
         <div className={itemClass}>
           <input
             type="checkbox"
-            defaultChecked={completed}
+            checked={completed}
             onClick={this.onToggleCompleted}
             className={style.toggle}
           />

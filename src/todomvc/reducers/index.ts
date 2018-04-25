@@ -2,6 +2,7 @@ import { ITodo, uuid, ITodoList, ITodoApp } from "../types";
 import { combineReducers, Action, Reducer } from "redux";
 import { OrderedMap } from "immutable";
 import { Util } from "../util";
+import { ICompleteTodoAction, IDeleteTodo, ITodoAction } from "../actions/index";
 import {
   ACTIVE_TODOS,
   ADD_TODO,
@@ -9,11 +10,9 @@ import {
   CLEAR_COMPLETED_TODO,
   COMPLETED_TODOS,
   DELETE_TODO,
-  ICompleteTodoAction,
-  IDeleteTodo,
-  ITodoAction,
-  TOGGLE_COMPLETED_TODO
-} from "../actions/index";
+  TOGGLE_COMPLETED_TODO,
+  TOGGLE_ALL_TODO
+} from "../constance/index";
 
 const TodoOrderedMap = OrderedMap<uuid, ITodo>();
 
@@ -40,6 +39,15 @@ export function todos(
           completed: !completed
         };
       });
+
+    case TOGGLE_ALL_TODO:
+      const checked: boolean = (action as any).checked;
+      const result: any = state.map((item: ITodo): ITodo => {
+        item.completed = checked;
+        return item;
+      }) as ITodoList;
+      console.log(result.values().next());
+      return result;
 
     case DELETE_TODO:
       return state.remove((action as ICompleteTodoAction).id);

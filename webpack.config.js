@@ -73,7 +73,7 @@ const config = {
           env !== "production"
             ? [
                 "style",
-                "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[path][name]---[local]---[hash:base64:5]&importLoaders=1",
+                "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[name]-[local]-[hash:base64:5]&importLoaders=1",
                 // "postcss",
                 "sass"
               ]
@@ -156,7 +156,7 @@ const config = {
     new ExtractTextPlugin("main.[hash:8].css"),
 
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./public/index.html",
       chunks: ["index", "vendors", "manifest"],
       filename: "index.html"
     })
