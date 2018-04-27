@@ -23,7 +23,6 @@ export interface ITodoAction extends Action {
   title: string;
   completed: boolean;
 }
-
 export function addTodo(title: string): ITodoAction {
   return { type: ADD_TODO, title, completed: false };
 }

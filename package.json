@@ -5,7 +5,7 @@
   "description": "meeting-operate-application",
   "scripts": {
     "start": "webpack-dev-server --hot --host 0.0.0.0 --port 8000 --inline  --progress --color --open --client-log-level error --display-error-details ",
-    "start:ie": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0 --port 9900",
+    "start:ie": "webpack-dev-server --history-api-fallback --progress --color --open --host 0.0.0.0 --port 9900",
     "format": "prettier './**/*.js' 'src/**/*.ts' 'src/**/*.tsx' --write",
     "webpack": "./node_modules/webpack/bin/webpack.js",
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
