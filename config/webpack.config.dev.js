@@ -6,14 +6,12 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-var extractSCSS = new ExtractTextPlugin('[name].scss');
 
 // 获取node环境变量
-let env = process.env.NODE_ENV || "production";
+let env = "development" | process.env.NODE_ENV || "production";
 
 // todo: 使用react外部cdn
 const config = {
-  devtool: "source-map",
 
   devServer: {
     colors: true,
@@ -24,7 +22,7 @@ const config = {
   },
 
   entry: {
-    index: [path.resolve(__dirname, "./src/todomvc/index.tsx")],
+    index: [path.resolve(__dirname, "../src/todomvc/index.tsx")],
     vendors: [
       "es6-promise",
       "fetch-ie8",
@@ -34,7 +32,7 @@ const config = {
   },
 
   output: {
-    path: path.resolve(__dirname, "build", env),
+    path: path.resolve(__dirname, "../build", env),
     filename: "js/[name].[chunkhash:8].js"
     //publicPath: conf.staticResource
   },
@@ -63,14 +61,11 @@ const config = {
         // ExtractTextPlugin 需要为loader
         // issue here:
         // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/30
-        loaders: env === "production"
-          ? extractSCSS.extract(['css','postcss', 'sass'])
-          : [
-            "style",
-            "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[local]-[hash:base64:5]&importLoaders=2",
-            "postcss",
-            "sass"
-          ]
+        loaders:
+          env === "development"
+            // ? ["style", "css?modules", "postcss", "sass"]
+        ? ExtractTextPlugin.extract("style", ["css?modules", "postcss", "sass"])
+            : ExtractTextPlugin.extract("style", ["css?modules", "postcss", "sass"])
       }
     ],
 
@@ -85,7 +80,6 @@ const config = {
     postLoaders: [
       {
         test: /\.(ts|tsx|js|jsx)$/,
-        include: 'src',
         loaders: ["es3ify-loader"]
       }
     ]
@@ -109,9 +103,7 @@ const config = {
       filename: "js/[name].[hash:8].js"
     }),
 
-    // new ExtractTextPlugin("main.[hash:8].css"),
-
-    extractSCSS,
+    new ExtractTextPlugin("main.[hash:8].css"),
 
     new HtmlWebpackPlugin({
       template: "./public/index.html",
@@ -146,10 +138,8 @@ if (env === "production") {
       output: {
         screw_ie8: false //
       }
-    })
-  );
+    }),
 
-  config.plugins.push(
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production")
     })
