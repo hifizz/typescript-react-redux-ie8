@@ -6,7 +6,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-var extractSCSS = new ExtractTextPlugin("[name].scss");
+var extractSCSS = new ExtractTextPlugin('[name].scss');
 
 // 获取node环境变量
 let env = process.env.NODE_ENV || "production";
@@ -15,21 +15,21 @@ let env = process.env.NODE_ENV || "production";
 const config = {
   devtool: "source-map",
 
-  devServer: {
-    colors: true,
-    modules: false,
-    children: false,
-    chunks: false,
-    chunkModules: false
-  },
+  // devServer: {
+  //   colors: true,
+  //   modules: false,
+  //   children: false,
+  //   chunks: false,
+  //   chunkModules: false
+  // },
 
   entry: {
     index: [path.resolve(__dirname, "./src/todomvc/index.tsx")],
     vendors: [
       "es5-shim",
       "es5-shim/es5-sham",
-      "console-polyfill",
-      "babel-polyfill",
+      'console-polyfill',
+      'babel-polyfill',
       "es6-promise",
       "fetch-ie8",
       "qs"
@@ -52,26 +52,24 @@ const config = {
     rules: [
       {
         test: /\.(ts|tsx)$/,
-        enforce: "pre",
-        include: path.resolve(__dirname, "src"),
-        use: [
-          {
-            loader: "tslint-loader",
-            options: {
-              fix: true
-            }
+        enforce: 'pre',
+        include: path.resolve(__dirname, 'src'),
+        use: [{
+          loader: "tslint-loader",
+          options: {
+            fix: true
           }
-        ]
+        }]
       },
       {
         test: /\.(ts|tsx)$/,
-        include: path.resolve(__dirname, "src"),
-        use: ["ts-loader"]
+        include: path.resolve(__dirname, 'src'),
+        use: ['ts-loader']
       },
       {
         test: /\.(ts|tsx|js|jsx)$/,
-        include: path.resolve(__dirname, "src"),
-        enforce: "post",
+        include: path.resolve(__dirname, 'src'),
+        enforce: 'post',
         use: ["es3ify-loader"]
       },
       {
@@ -86,18 +84,17 @@ const config = {
         // issue here:
         // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/30
         use: [
-          { loader: "style-loader" },
+          {loader: "style-loader"},
           {
-            loader: "typings-for-css-modules-loader",
-            options: {
-              namedExport: true,
-              modules: true,
-              localIdentName: "[local]-[hash:base64:5]",
-              importLoaders: 2
-            }
+            loader: "typings-for-css-modules-loader", options: {
+            namedExport: true,
+            modules: true,
+            localIdentName: "[local]-[hash:base64:5]",
+            importLoaders: 2
+          }
           },
-          { loader: "postcss-loader" },
-          { loader: "sass-loader" }
+          {loader: "postcss-loader"},
+          {loader: "sass-loader"}
         ]
       }
     ]
@@ -115,7 +112,7 @@ const config = {
     extractSCSS,
 
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "./src/index.html"),
+      template: "./public/index.html",
       chunks: ["index", "vendors", "manifest"],
       filename: "index.html"
     })
