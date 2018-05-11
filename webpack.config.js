@@ -6,7 +6,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-var extractSCSS = new ExtractTextPlugin('[name].scss');
+var extractSCSS = new ExtractTextPlugin("[name].scss");
 
 // 获取node环境变量
 let env = process.env.NODE_ENV || "production";
@@ -25,11 +25,7 @@ const config = {
 
   entry: {
     index: [path.resolve(__dirname, "./src/todomvc/index.tsx")],
-    vendors: [
-      "es6-promise",
-      "fetch-ie8",
-      "qs"
-    ]
+    vendors: ["es6-promise", "fetch-ie8", "qs"]
     // , webpack: "webpack/hot/dev-server"
   },
 
@@ -58,20 +54,21 @@ const config = {
 
       {
         test: /\.(css|scss)$/,
-        // include: [path.resolve(__dirname, 'src')],
-        // 这里的loaders 如果是 env === development 应该取loaders
-        // ExtractTextPlugin 需要为loader
-        // issue here:
-        // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/30
-        loaders: env === "production"
-          ? extractSCSS.extract(['css','postcss', 'sass'])
-          : [
-            "style",
-            "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[local]-[hash:base64:5]&importLoaders=2",
-            "postcss",
-            "sass"
-          ]
+        // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/110
+        loader: extractSCSS.extract(
+          "style",
+          "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[local]-[hash:base64:5]&importLoaders=2!postcss!sass"
+        )
       }
+      // ,{
+      //   test: /\.(css|scss)/,
+      //   loaders: [
+      //     "style",
+      //     "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[local]-[hash:base64:5]&importLoaders=2",
+      //     "postcss",
+      //     "sass"
+      //   ]
+      // }
     ],
 
     preLoaders: [
@@ -85,7 +82,7 @@ const config = {
     postLoaders: [
       {
         test: /\.(ts|tsx|js|jsx)$/,
-        include: 'src',
+        include: "src",
         loaders: ["es3ify-loader"]
       }
     ]
