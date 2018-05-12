@@ -11,6 +11,7 @@ import { createLogger } from "redux-logger";
 import thunkMiddleware from "redux-thunk";
 import App from "../todomvc/components/App/index";
 import MeetingApp from "../todomvc/reducers/index";
+import "../style/global.scss";
 
 const isIE8: boolean = utils.isIE8();
 let store: Store<any>;

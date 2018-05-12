@@ -1,9 +1,24 @@
 # TypeScript-React-Redux todomvc (IE8+)
 本项目是一个兼容IE8的 TypeScript + React + Redux + immutablejs 的项目模板。
+为了降低上手难度，我在项目中写3个DEMO，一个hackernews，一个使用了immutablejs的todomvc
+另外一个是未使用的。使用时，只需要把这些文件夹删掉就好了。
 
 ## Show me the code
 Code在此：[TypeScript-React-redux-ie8](https://github.com/hifizz/typescript-react-redux-ie8)  
 Demo在此：[Todomvc-Typescript-react-redux-immutable](http://demo.hifizz.com/demo/todomvc/development/index.html)
+
+## Usage
+使用方法很简单，只需要把项目克隆到本地，然后安装依赖就可以跑起来了。
+```bash
+$ git clone https://github.com/hifizz/typescript-react-redux-ie8.git 
+
+# 为了顺利的安装依赖，这里最好是使用cnpm，不要使用yarn
+# 有以下几点原因：
+# 1.yarn 会更新某些依赖，造成不可知错误。
+# 2.node-sass很容易安装失败。
+$ cnpm install
+$ cnpm start
+```
 
 ## Feature
 - 兼容IE8
