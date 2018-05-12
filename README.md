@@ -1,9 +1,9 @@
 # TypeScript-React-Redux (IE8+)
 本项目是一个兼容IE8的 TypeScript + React + Redux + immutablejs 的项目模板。
 为了降低上手难度，我在项目中写3个DEMO：
-- todomvc with immutabeljs (ts + react + redux)
-- todomvc without immutablejs (ts + react+ redux + immutablejs)
-- hackernews (ts + react + redux + immutablejs)
+- todomvc without immutabeljs (ts + react + redux)
+- [todo] todomvc with immutablejs (ts + react+ redux + immutablejs)
+- [todo] hackernews (ts + react + redux + immutablejs)
 
 使用时，只需要把这些文件夹删掉就好了。
 
@@ -38,6 +38,8 @@ $ npm run build
 $ npm run format
 ```
 
+---
+
 ## Feature
 - 兼容IE8
 - TypeScript && ES6/ES7/ES8 语法
@@ -55,6 +57,42 @@ $ npm run format
 - webpack-dev-server 热更新、无刷新，IE8 可以手动刷新（不支持websocket）
 
 > React 版本为0.14.9，使用了ES6的最新语法编写，（万一有一天，万一...）可以无缝过渡到React新版本，也可以同一套代码使用两个不同版本的React输出两套代码跑在不同的浏览器上
+
+### 如何兼容IE8
+#### 兼容IE8的本质是什么
+- ES5 ES6 新api
+- IE8 下某些保留关键字
+- console
+
+1.IE8全面支持ES3的规范，但完全不支持ES5（IE9支持部分ES5，不完全），所以ES5的API需要模拟。因此我们需要`polyfill`和`shim`。因此我们需要使用`es5-shim`,同时引用`es5-shim/sham`。IE8也不支持console，具体表现是IE8下console为undefined，于是需要把这货定义一下，把console的各种方法用空函数代替。同时，我们使用ES6的语法来编写源代码，ES5和ES6的新API在IE8上是没有的，我们需要`babel-polyfill`帮助补齐。看到这里，貌似一切万事大吉，但是，凡事有个但是，ES5定义的`Object.definePropotype`这个api是无法完全模拟出来的，即使是上面的`es5-shim`。关于这一点，社区的解决方案是：不使用这个api，可现有大部分第三方都是用这个api来定义属性的。解决方案：
+- babel preset loose = true
+- TypeScript target = es3
+
+
+#### 兼容的做法:
+- shim & polyfill
+- TS target 设置为 `es3`
+- post-loader 使用 es3-loader
+- uglyifyjs 解决IE8 问题
+
+以上步骤缺一不可。
+
+本项目为了兼容ie8，使用了低版本的react@0.14.9、webpack@1.12.9和react-router@1.0.2，
+使用上与高版本的可能不同，文档可参考根目录下node_molules对应的每个包的docs。
+
+细节往下看这里。
+
+#### TypeScript target 设置为 `es3`
+在根目录下有一份 `tsconfig.json` 文件，这是 TypeScript 的项目配置文件，类似于babel，在项目下有一个`.babelrc`。
+只要将其中的 compilerOptions.target 设置为 `es3` 即可。这代表TypeScript将会把源代码转译成 ES3 规范下可跑的代码。
+
+```json
+{
+  "compilerOptions": {
+    "target": "es3"
+  }
+}
+```
 
 ### CSS 解决方案
 本项目采用SASS + PostCSS + CSS Module 编写和处理CSS。CSS Module 是一个Scope CSS的方案。PostCSS 后处理器主要用到了[`autoprefixer`](https://github.com/postcss/autoprefixer)和[`cssnano`](http://cssnano.co/)两个插件，前者是用来给浏览器自动添加前缀的--基于[`caniuse`](http://caniuse.com/)的数据。SASS的使用纯属个人喜好，毕竟我已经使用SASS三年了。
@@ -136,32 +174,6 @@ class App extends React.Component {
 }
 .content {
   background-color: red;
-}
-```
-
-
-
-### 如何兼容IE8
-- TS target 设置为 `es3`
-- post-loader 使用 es3-loader
-- uglyifyjs 解决IE8 问题
-
-以上步骤缺一不可。
-
-本项目为了兼容ie8，使用了低版本的react@0.14.9、webpack@1.12.9和react-router@1.0.2，
-使用上与高版本的可能不同，文档可参考根目录下node_molules对应的每个包的docs。
-
-细节往下看这里。
-
-#### TypeScript target 设置为 `es3`
-在根目录下有一份 `tsconfig.json` 文件，这是 TypeScript 的项目配置文件，类似于babel，在项目下有一个`.babelrc`。
-只要将其中的 compilerOptions.target 设置为 `es3` 即可。这代表TypeScript将会把源代码转译成 ES3 规范下可跑的代码。
-
-```json
-{
-  "compilerOptions": {
-    "target": "es3"
-  }
 }
 ```
 
