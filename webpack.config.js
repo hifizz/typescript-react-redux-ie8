@@ -1,4 +1,5 @@
 /**
+ * Webpack 配置，需要拆成dev和prd
  * @author stack fizz <fizzstack@gmail.com>
  */
 
@@ -28,6 +29,26 @@ switch (ENV_NODE_ENV) {
   default:
     ENV_DIST_DIR = 'dev';
 }
+
+const normalSCSSLoaders = {
+  // ExtractTextPlugin.extract 需要为loader，这里是loaders
+  // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/110
+  test: /\.(css|scss)$/,
+  loaders: [
+    "style",
+    "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[local]---[hash:base64:8]&importLoaders=2",
+    "postcss",
+    "sass"
+  ]
+};
+
+const extractSCSSLoaders = {
+  test: /\.(css|scss)$/,
+  loader: ExtractTextPlugin.extract(
+    "style",
+    "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[path][name]---[local]---[hash:base64:5]&importLoaders=2!postcss!sass"
+  )
+};
 
 // todo: 使用react外部cdn
 const config = {
@@ -59,7 +80,7 @@ const config = {
     path: path.resolve(__dirname, 'build', ENV_DIST_DIR),
     filename: 'js/[name].[chunkhash:8].js',
     //publicPath: conf.staticResource
-    publicPath: path.resolve(__dirname, 'build', ENV_DIST_DIR, 'public')
+    // publicPath: './'
   },
 
   resolve: {
@@ -77,24 +98,6 @@ const config = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         loader: 'url-loader?limit=2048&name=img/[name].[hash:8].[ext]&publicPath=./'
-      },
-      // {
-      // ExtractTextPlugin.extract 需要为loader，这里是loaders
-      // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/110
-      // test: /\.(css|scss)$/,
-      // loaders: [
-      //   "style",
-      //   "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[path][name]---[local]---[hash:base64:5]&importLoaders=2",
-      //   "postcss",
-      //   "sass"
-      // ]
-      // },
-      {
-        test: /\.(css|scss)$/,
-        loader: ExtractTextPlugin.extract(
-          "style",
-          "typings-for-css-modules-loader?namedExport=true&modules&localIdentName=[path][name]---[local]---[hash:base64:5]&importLoaders=2!postcss!sass"
-        )
       }
     ],
 
@@ -148,9 +151,11 @@ const config = {
   ]
 };
 
-// 开发环境和预发布环境环境
-if (ENV_NODE_ENV === 'development' || ENV_NODE_ENV === 'preProduction') {
+// 开发环境
+if (ENV_NODE_ENV === 'development') {
   config.devtool = 'source-map';
+
+  config.module.loaders.push(normalSCSSLoaders);
 
   config.plugins.push(
     new webpack.DefinePlugin({
@@ -159,8 +164,11 @@ if (ENV_NODE_ENV === 'development' || ENV_NODE_ENV === 'preProduction') {
   );
 }
 
-// 生产环境和预发布环境
+// 生产环境
 if (ENV_NODE_ENV === 'production') {
+  config.module.loaders.push(extractSCSSLoaders);
+  config.plugins.push(new ExtractTextPlugin('css/main.[hash:8].css'));
+
   config.plugins.push(
     // 在 webpack@1.x 版本，自带的 UglifyJs 需要为JS设置IE8的支持
     // 分别有三个时机：压缩，混淆，输出
@@ -171,11 +179,11 @@ if (ENV_NODE_ENV === 'production') {
       // 压缩时
       compress: {
         warnings: false,
-        screw_ie8: false // 不抛弃IE8
+        screw_ie8: true // 不抛弃IE8
       },
       // 混淆时
       mangle: {
-        screw_ie8: false // 不抛弃IE8
+        screw_ie8: true // 不抛弃IE8
       },
       // 输出时
       output: {
