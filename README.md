@@ -22,12 +22,20 @@ $ git clone https://github.com/hifizz/typescript-react-redux-ie8.git
 # 2.node-sass很容易安装失败。
 $ cnpm install
 
+# 安装完依赖之后，如果你用 VS Code 打开，它极大概率上用的是最新版本的 TypeScript
+# 这会报一些错误，可能让你感到疑惑，可见下贴图。
+
 # then open http://localhost:8888 in your browser.
 $ cnpm start
 
 # 在IE8浏览器上打开（ie8，9不支持socket，所以不能热更新，下面命令可以手动刷新）
 $ npm start:ie
 ```
+
+> 在 VS Code 中打开时需要设置TypeScript版本
+
+![ts-2.8.3](./docs/images/ts-2.8.3.png)
+![ts-2.3.4](./docs/images/ts-2.3.4.png)
 
 ## 其他的一些命令
 ```bash
