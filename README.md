@@ -189,6 +189,9 @@ class App extends React.Component {
 - Dash
 - GitHub 源码
 
+##### Dash
+![](./docs/images/dash-react-history.png)
+
 #### TypeScript 如何和 `React-redux` 结合
 ```tsx
 // 解决方案
