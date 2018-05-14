@@ -16,19 +16,20 @@ Demo在此：[Todomvc-Typescript-react-redux-immutable](http://demo.hifizz.com/d
 ```bash
 $ git clone https://github.com/hifizz/typescript-react-redux-ie8.git
 
-# 为了顺利的安装依赖，这里最好是使用cnpm，不要使用yarn
+# 为了顺利的安装依赖，这里最好是使用cnpm，npm, 不要使用yarn
 # 有以下几点原因：
-# 1.yarn 会更新某些依赖，造成不可知错误。
+# 1.yarn 会更新某些依赖，造成不可知错误。(redux 会依赖 react@16.x.d.td)
 # 2.node-sass很容易安装失败。
 $ cnpm install
 
 # 安装完依赖之后，如果你用 VS Code 打开，它极大概率上用的是最新版本的 TypeScript
 # 这会报一些错误，可能让你感到疑惑，可见下贴图。
 
-# then open http://localhost:8888 in your browser.
+# then open http://localhost:8800 in your browser.
 $ cnpm start
 
 # 在IE8浏览器上打开（ie8，9不支持socket，所以不能热更新，下面命令可以手动刷新）
+# then open http://localhost:9900 in your browser
 $ npm start:ie
 ```
 
@@ -68,14 +69,14 @@ $ npm run format
 
 ### 如何兼容IE8
 #### 兼容IE8的本质是什么
-- ES5 ES6 新api
-- IE8 下某些保留关键字
-- console
+- 模拟 ES5 ES6 新api
+- 用[""]引用 IE8 下某些保留关键字
+- 模拟 console
+- 避免使用`Object.definePropotype`，或者使用替代方式
 
 1.IE8全面支持ES3的规范，但完全不支持ES5（IE9支持部分ES5，不完全），所以ES5的API需要模拟。因此我们需要`polyfill`和`shim`。因此我们需要使用`es5-shim`,同时引用`es5-shim/sham`。IE8也不支持console，具体表现是IE8下console为undefined，于是需要把这货定义一下，把console的各种方法用空函数代替。同时，我们使用ES6的语法来编写源代码，ES5和ES6的新API在IE8上是没有的，我们需要`babel-polyfill`帮助补齐。看到这里，貌似一切万事大吉，但是，凡事有个但是，ES5定义的`Object.definePropotype`这个api是无法完全模拟出来的，即使是上面的`es5-shim`。关于这一点，社区的解决方案是：不使用这个api，可现有大部分第三方都是用这个api来定义属性的。解决方案：
 - babel preset loose = true
 - TypeScript target = es3
-
 
 #### 兼容的做法:
 - shim & polyfill
@@ -90,11 +91,37 @@ $ npm run format
 
 细节往下看这里。
 
+#### shim & polyfill
+```bash
+$ npm i es5-shim
+$ npm i console-polyfill
+$ npm i babel-polyfill
+$ npm i es6-promise
+```
+
+```js
+// webpack.config.js
+module.exports = {
+  entry: {
+    vendors: [
+      "es5-shim",
+      "es5-shim/es5-sham",
+      'console-polyfill',
+      'babel-polyfill',
+      'es6-promise',
+      'fetch-ie8',
+      'qs'
+    ]
+  }
+}
+```
+
 #### TypeScript target 设置为 `es3`
 在根目录下有一份 `tsconfig.json` 文件，这是 TypeScript 的项目配置文件，类似于babel，在项目下有一个`.babelrc`。
 只要将其中的 compilerOptions.target 设置为 `es3` 即可。这代表TypeScript将会把源代码转译成 ES3 规范下可跑的代码。
 
 ```json
+// tsconfig.json
 {
   "compilerOptions": {
     "target": "es3"

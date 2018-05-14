@@ -12,7 +12,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 let ENV_NODE_ENV = process.env.NODE_ENV || 'production';
 
 // 临时设置一下
-// ENV_NODE_ENV = "development";
+ENV_NODE_ENV = "development";
 
 // 根据当前执行环境变量设置build输出的目录
 // map 关系是这样的：
@@ -119,6 +119,7 @@ const config = {
     // after : e["default"]
     postLoaders: [{
       test: /\.(ts|tsx|js|jsx)$/,
+      // exclude: /node_modules/,
       loaders: ['es3ify-loader'],
     }],
   },
@@ -130,7 +131,7 @@ const config = {
   },
 
   // externals: {
-  //   react: 'React',
+  //   'react': 'React',
   //   'react-dom': 'ReactDOM'
   // },
 
@@ -162,35 +163,31 @@ if (ENV_NODE_ENV === 'development') {
       'process.env.NODE_ENV': JSON.stringify('development')
     })
   );
+
 }
 
 // 生产环境
 if (ENV_NODE_ENV === 'production') {
+
   config.module.loaders.push(extractSCSSLoaders);
   config.plugins.push(new ExtractTextPlugin('css/main.[hash:8].css'));
 
-  config.plugins.push(
-    // 在 webpack@1.x 版本，自带的 UglifyJs 需要为JS设置IE8的支持
-    // 分别有三个时机：压缩，混淆，输出
-    // 因此在这里统统都加上`screw_ie8: false`
-    // `screw` 意为，扔掉，false 就是不抛弃 IE8 。
-    // 本质上就是不把上面es3ify-loader给关键字加上的 [""] 去掉
-    new webpack.optimize.UglifyJsPlugin({
-      // 压缩时
-      compress: {
-        warnings: false,
-        screw_ie8: true // 不抛弃IE8
-      },
-      // 混淆时
-      mangle: {
-        screw_ie8: true // 不抛弃IE8
-      },
-      // 输出时
-      output: {
-        screw_ie8: false // 不抛弃IE8
-      }
-    })
-  );
+  // 暂时发现这里会导致redux-logger的undefined会变成 "undefined"
+  new webpack.optimize.UglifyJsPlugin({
+    // 压缩时
+    compress: {
+      warnings: false,
+      screw_ie8: false // 不抛弃IE8
+    },
+    // 混淆时
+    mangle: {
+      screw_ie8: false // 不抛弃IE8
+    },
+    // 输出时
+    output: {
+      screw_ie8: false // 不抛弃IE8
+    }
+  })
 
   config.plugins.push(
     new webpack.DefinePlugin({

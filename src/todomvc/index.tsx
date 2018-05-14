@@ -41,10 +41,12 @@ ReactDOM.render(
 //   (module as any).hot.accept();
 // }
 
-if ((module as any).hot) {
-  (module as any).hot.accept("../todomvc/components/App/index", () => {
-    // tslint:disable-next-line
-    const App = require("../todomvc/components/App/index").default;
-    ReactDOM.render(<App store={store} />, document.getElementById("app"));
-  });
+if (process.env.NODE_ENV !== "production") {
+  if ((module as any).hot) {
+    (module as any).hot.accept("../todomvc/components/App/index", () => {
+      // tslint:disable-next-line
+      const App = require("../todomvc/components/App/index").default;
+      ReactDOM.render(<App store={store} />, document.getElementById("app"));
+    });
+  }
 }

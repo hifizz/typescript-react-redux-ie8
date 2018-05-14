@@ -1,11 +1,11 @@
+
 {
   "name": "typescript-react-redux-ie8",
   "version": "0.0.6",
   "description": "TypeScript React Redux starter template, work well with ie8.",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --port 8889 --inline  --progress --color --open --client-log-level error --display-error-details ",
-    "start-ie": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 8888 --inline  --progress --color --open --client-log-level error --display-error-details ",
-    "start:prod": "webpack-dev-server --history-api-fallback --progress --host 0.0.0.0 --port 9900",
+    "start": "NODE_ENV=development webpack-dev-server --history-api-fallback --hot --host 0.0.0.0 --port 8800 --inline  --progress --color --open --client-log-level error --display-error-details ",
+    "start:ie": "NODE_ENV=development webpack-dev-server --history-api-fallback --progress --host 0.0.0.0 --port 9900",
     "build": "NODE_ENV=production webpack --verbose",
     "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}",
     "webpack": "./node_modules/webpack/bin/webpack.js",
