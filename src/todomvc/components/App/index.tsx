@@ -10,11 +10,10 @@ import {
   completeTodo,
   deleteTodo,
   editTodo,
-  ITodoAction,
   toggleAll
 } from "../../actions";
 import { ACTIVE_TODOS, ALL_TODOS, COMPLETED_TODOS } from "../../constance/index";
-import { ITodo, ITodoApp, ITodoList, TUUID, uuid } from "../../types";
+import { ITodo, ITodoApp, ITodoList, uuid } from "../../types";
 
 interface IAppComponentStateProps {
   todos: ITodoList;

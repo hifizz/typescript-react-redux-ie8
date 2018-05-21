@@ -229,7 +229,70 @@ class App extends React.Component {
 
 #### TypeScript 如何和 `React-redux` 结合
 ```tsx
-// 解决方案
+// 单纯 TypeScript + React 模板
+import * as React from 'react';
+
+interface IAppProps {
+  name: string;
+  age?: number;
+}
+
+interface IAppState {
+  color: blue;
+}
+
+class App extends React.Component {
+  render() {
+    const props = this.props;
+    return (
+      <div>
+        <div>hello App</div>
+        <div>{`${props.name} now is ${props.age} years old. His color is ${this.state.color}`}</div>
+      </div>
+    )
+  }
+}
+
+export default App
+```
+
+```tsx
+// TypeScript + React + redux 模板
+import React from 'react';
+import { connect, Dispatch } from 'react-redux';
+
+interface IAppStateProps {}
+
+interface IAppDispatchProps {}
+
+type IAppProps = IAppStateProps & IAppDispatchProps;
+
+interface IAppState {}
+
+class App extends React.Component<IAppProps, IAppState> {
+  public render() {
+    return (
+      <span>Body</span>
+    );
+  }
+}
+
+const mapStateToProps = (state: any): IAppStateProps => {
+  return {
+      // ...mapStateToProps
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<any>): IAppDispatchProps => {
+  return {
+    // ...mapDispatchToProps
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);
 ```
 
 #### TypeScript 如何 使用 CSS Module
@@ -247,3 +310,6 @@ class App extends React.Component {
 ### TODO
 - webpack config 设置多个环境
 - webpack merge
+
+### problem
+- 现在的webpack uglifyJS plugin 混淆之后的代码不能在ie8上运行 [https://github.com/SamHwang1990/blog/issues/6](https://github.com/SamHwang1990/blog/issues/6)
