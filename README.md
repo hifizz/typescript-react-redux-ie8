@@ -8,8 +8,8 @@
 使用时，只需要把这些文件夹删掉就好了。
 
 ## Show me the code
-Code在此：[TypeScript-React-redux-ie8](https://github.com/hifizz/typescript-react-redux-ie8)
-Demo在此：[Todomvc-Typescript-react-redux-immutable](http://demo.hifizz.com/demo/todomvc/development/index.html)
+Code在此：[TypeScript-React-redux-ie8](https://github.com/hifizz/typescript-react-redux-ie8)  
+Demo在此：[Todomvc-Typescript-react-redux-immutable](https://hifizz.github.io/typescript-react-redux-ie8/demo/index.html)
 
 ## Usage
 使用方法很简单，只需要把项目克隆到本地，然后安装依赖就可以跑起来了。
