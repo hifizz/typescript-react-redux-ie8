@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@10.172.94.171:10022/server/mop.git"
+    "url": "https://github.com/hifizz/typescript-react-redux-ie8.git"
   },
   "license": "ISC",
   "dependencies": {
